@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Для тебя 💘</title>
+
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background: radial-gradient(circle at top, #ffe6f0, #fff);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .story {
+    width: 90%;
+    max-width: 420px;
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 30px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: all 0.4s ease;
+  }
+
+  .emoji {
+    font-size: 50px;
+    margin-bottom: 10px;
+    animation: pop 0.6s ease;
+  }
+
+  h2 {
+    color: #ff4d88;
+    margin-bottom: 10px;
+  }
+
+  p {
+    color: #444;
+    line-height: 1.6;
+    font-size: 1rem;
+  }
+
+  button {
+    margin-top: 20px;
+    padding: 12px 26px;
+    border: none;
+    border-radius: 30px;
+    background: #ff4d88;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.2s;
+  }
+
+  button:hover {
+    transform: scale(1.05);
+  }
+
+  .fade {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  .hearts {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .heart {
+    position: absolute;
+    font-size: 18px;
+    animation: floatUp 2s linear forwards;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-200px); opacity: 0; }
+  }
+
+  @keyframes pop {
+    from { transform: scale(0.6); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+</style>
+</head>
+
+<body>
+
+<div class="hearts" id="hearts"></div>
+
+<div class="story" id="story">
+  <div class="emoji">👀</div>
+  <h2>У меня есть кое-что для тебя</h2>
+  <p>Но тебе нужно пройти маленькую историю...</p>
+  <button onclick="nextStep()">Дальше 💖</button>
+</div>
+
+<script>
+const story = document.getElementById("story");
+const hearts = document.getElementById("hearts");
+
+let step = 0;
+
+const steps = [
+  {
+    emoji: "🙂",
+    title: "Привет",
+    text: "Я долго думал, как тебе это сказать..."
+  },
+  {
+    emoji: "💭",
+    title: "Мысли",
+    text: "Ты часто появляешься в моих мыслях. Слишком часто."
+  },
+  {
+    emoji: "💖",
+    title: "Чувства",
+    text: "И я понял, что это уже не просто симпатия..."
+  },
+  {
+    emoji: "🌙",
+    title: "Вечера",
+    text: "Каждый вечер я ловлю себя на мысли, что хочу написать тебе."
+  },
+  {
+    emoji: "💘",
+    title: "Правда",
+    text: "Мне ты очень нравишься. По-настоящему."
+  },
+  {
+    emoji: "💌",
+    title: "Финал",
+    text: "Если ты это читаешь — значит, ты особенная для меня 💖"
+  }
+];
+
+function spawnHeartBurst() {
+  for (let i = 0; i < 15; i++) {
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.innerText = "💖";
+    h.style.left = Math.random() * window.innerWidth + "px";
+    h.style.top = window.innerHeight + "px";
+    hearts.appendChild(h);
+
+    setTimeout(() => h.remove(), 2000);
+  }
+}
+
+function nextStep() {
+  story.classList.add("fade");
+
+  setTimeout(() => {
+    step++;
+
+    if (step >= steps.length) {
+      story.innerHTML = `
+        <div class="emoji">💖</div>
+        <h2>Это всё</h2>
+        <p>Теперь ты знаешь главное...</p>
+        <p><b>Я тебя люблю 💘</b></p>
+      `;
+
+      spawnHeartBurst();
+      story.classList.remove("fade");
+      return;
+    }
+
+    const s = steps[step];
+
+    story.innerHTML = `
+      <div class="emoji">${s.emoji}</div>
+      <h2>${s.title}</h2>
+      <p>${s.text}</p>
+      <button onclick="nextStep()">Дальше 💖</button>
+    `;
+
+    story.classList.remove("fade");
+
+    if (step === steps.length - 1) {
+      spawnHeartBurst();
+    }
+
+  }, 250);
+}
+</script>
+
+</body>
+</html>
